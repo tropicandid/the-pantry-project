@@ -1,5 +1,6 @@
 .DS_Store
 .idea/
+.vscode/
 
 instance
 node_modules/
@@ -8,5 +9,17 @@ __pycache__/
 *.pyc
 
 .env
-
+venv/
+env/
+ENV/
+.venv/
 !.env.default
+
+*.db
+db.*
+db.sqlite3
+
+/media/
+/static/
+profile_images/
+
