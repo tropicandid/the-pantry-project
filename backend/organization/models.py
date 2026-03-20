@@ -20,7 +20,7 @@ class Organization(models.Model):
     logo = models.ImageField(upload_to='logos/', blank=True, null=True) 
     cover_image = models.ImageField(upload_to='cover_images/', blank=True, null=True) 
     organization_type = models.CharField(max_length=20, choices=OrganizationType.choices, default=OrganizationType.BUSINESS)
-    owners = models.ManyToManyField(User, related_name="owned_organizations") #These are the admin users that manage the organization's details.
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owned_organizations", default=1) # This is the user that owns the organization. They will have admin access to the organization and can manage it. We will set a default for now to avoid issues with creating organizations without an owner, but we will need to update this later to require an owner.
     members = models.ManyToManyField(User, related_name="organizations", blank=True, null=True) # These are the users that are part of the organization. This can include owners as well, but also other users that are not admins.
 
     def __str__(self):
