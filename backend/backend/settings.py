@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     "organization.apps.OrganizationConfig",
     "rest_framework",
     "rest_framework_simplejwt", # BETTER FOR INTERFACING WITH REACT NATIVE FRONTENT
-    # "rest_framework.authtoken", # THIS IS WHAT THE TUTORIAL USES BUT WE ARE GOING TO USE SIMPLEJWT
+    # "rest_framework.authtoken",
     "user.apps.UserConfig",
 ]
 
