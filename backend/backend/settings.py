@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import datetime
 import os
 from pathlib import Path
 
@@ -26,25 +27,33 @@ SECRET_KEY = "django-insecure-zn04i%1e&*(hr!v=2tkf3h7rqregihq*jb6!%sfzuujz)zea#z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '192.168.1.2', 
+]
 
 # Application definition
 INSTALLED_APPS = [
-    "organization.apps.OrganizationConfig",
-    "user.apps.UserConfig",
-    "rest_framework",
+    "corsheaders",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_extensions", # FOR DEBUGGING PURPOSES, CAN BE REMOVED LATER
+    "organization.apps.OrganizationConfig",
+    "rest_framework",
+    "rest_framework_simplejwt", # BETTER FOR INTERFACING WITH REACT NATIVE FRONTENT
+    # "rest_framework.authtoken", # THIS IS WHAT THE TUTORIAL USES BUT WE ARE GOING TO USE SIMPLEJWT
+    "user.apps.UserConfig",
 ]
 
 AUTH_USER_MODEL = "user.User"
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -52,6 +61,12 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+]
+
+
+CORS_ALLOWED_ORIGINS = [
+    'http://192.168.1.2:8081', # UPDATE THIS TO YOUR LOCAL IP ADDRESS IF CHANGES
+    'http://localhost:8081', # UPDATE THIS TO YOUR LOCAL IP ADDRESS IF CHANGES
 ]
 
 ROOT_URLCONF = "backend.urls"
@@ -76,6 +91,7 @@ WSGI_APPLICATION = "backend.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
+#TODO : Update to PostgreSQL 
 
 DATABASES = {
     "default": {
@@ -122,3 +138,23 @@ USE_TZ = True
 STATIC_URL = "static/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:8081', # UPDATE THIS TO YOUR LOCAL IP ADDRESS IF CHANGES
+]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication', # BETTER FOR INTERFACING WITH REACT NATIVE FRONTENT
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+}
+
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=3),
+    'JWT_ALLOW_REFRESH': True
+}
