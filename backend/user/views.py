@@ -1,7 +1,8 @@
 from django.shortcuts import render
+#STARTING OUR AUTHENTICATION WORK
 from rest_framework import permissions, viewsets
 from .models import User, UserAccount, AccountTier
-from .serializer import UserSerializer, UserAccountSerializer    
+from .serializer import UserSerializer, UserAccountSerializer   
 
 # Create your views here.
 class UserViewSet(viewsets.ModelViewSet):
@@ -11,7 +12,9 @@ class UserViewSet(viewsets.ModelViewSet):
 
     queryset = User.objects.all().order_by("-date_joined")
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+
+    # We only want admins to be able to interface with the actual user model objects
+    permission_classes = [permissions.IsAdminUser]
 
 class UserAccountViewSet(viewsets.ModelViewSet):
     """
@@ -20,4 +23,6 @@ class UserAccountViewSet(viewsets.ModelViewSet):
 
     queryset = UserAccount.objects.all().order_by("-created_at")
     serializer_class = UserAccountSerializer
-    permission_classes = [permissions.IsAuthenticated]
+
+    # For user accounts, eventually we only want logged in admins or the users themselves to be able to access.
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]

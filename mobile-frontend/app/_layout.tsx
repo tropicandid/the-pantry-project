@@ -1,24 +1,49 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { Slot, Stack } from 'expo-router';
+import { Text, View, StyleSheet } from 'react-native';
+import { PaperProvider, useTheme } from "react-native-paper";
+import { SessionProvider, useSession } from './ctx';
+import { SplashScreenController } from './splash';
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
-
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
-
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
+export default function Root() {
+  console.log("Rendering Root Layout");
+  // Set up the auth context and render your layout inside of it.
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <SessionProvider>
+      <SplashScreenController />
+      <RootNavigator />
+    </SessionProvider>
   );
 }
+
+// Create a new component that can access the SessionProvider context later.
+function RootNavigator() {
+  console.log("Rendering Root Navigator");
+  const { session } = useSession();
+
+  return (
+    <Stack>
+      <Text style={styles.text}>User Session: {session ? "Authenticated" : "Not Authenticated"}</Text>
+    </Stack>
+  );
+}
+
+// export default function Root() {
+//   // Set up the auth context and render our layout inside of it.
+//   return (
+//       <PaperProvider>
+//         <Slot screenOptions={{ headerShown: false }} />
+//       </PaperProvider>
+//   );
+// }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#25292e',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    color: '#fff',
+  },
+});

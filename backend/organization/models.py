@@ -22,6 +22,9 @@ class Organization(models.Model):
     organization_type = models.CharField(max_length=20, choices=OrganizationType.choices, default=OrganizationType.BUSINESS)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owned_organizations", default=1) # This is the user that owns the organization. They will have admin access to the organization and can manage it. We will set a default for now to avoid issues with creating organizations without an owner, but we will need to update this later to require an owner.
     members = models.ManyToManyField(User, related_name="organizations", blank=True, null=True) # These are the users that are part of the organization. This can include owners as well, but also other users that are not admins.
+    email = models.EmailField(blank=True, null=True)
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
+    website = models.URLField(blank=True, null=True)
 
     def __str__(self):
         return self.name

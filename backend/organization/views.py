@@ -11,4 +11,4 @@ class OrganizationViewSet(viewsets.ModelViewSet):
 
     queryset = Organization.objects.all().order_by("name")
     serializer_class = OrganizationSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]

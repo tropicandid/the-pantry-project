@@ -21,4 +21,7 @@ class OrganizationSerializer(serializers.ModelSerializer):
                   'organization_type', 
                   'created_at', 
                   'logo', 
-                  'cover_image']
+                  'cover_image', 
+                  'email', 
+                  'phone_number', 
+                  'website']
